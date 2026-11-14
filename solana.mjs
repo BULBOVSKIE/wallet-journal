@@ -175,7 +175,14 @@ function tradeEvent(blobs, address, mint, side, quantity, market) {
     if (bytes.length >= 209 && disc === curveEvent && encodeBase58(bytes.subarray(8, 40)) === mint
       && encodeBase58(bytes.subarray(57, 89)) === address && Boolean(bytes[56]) === (side === 'buy')
       && bytes.readBigUInt64LE(48) === quantity) {
-      return { pool: market?.pool, creator: encodeBase58(bytes.subarray(177, 209)), amount: null };
+      let amount = null;
+      // The native curve event records the trade amount before protocol and creator fees.
+      if (market?.quoteMint === SOL && bytes.length >= 225) {
+        const gross = bytes.readBigUInt64LE(40);
+        const fees = bytes.readBigUInt64LE(169) + bytes.readBigUInt64LE(217);
+        amount = side === 'buy' ? gross + fees : gross > fees ? gross - fees : null;
+      }
+      return { pool: market?.pool, creator: encodeBase58(bytes.subarray(177, 209)), amount };
     }
   }
   return null;
@@ -247,8 +254,8 @@ export function parseTransaction(tx, address, signature = tx?.transaction?.signa
   const stableChange = changes.get(preferredQuote);
   let amount = null;
   if (stable.length <= 1 && quotes.has(preferredQuote)) {
-    if (preferredQuote === SOL && event?.amount != null) amount = Number(event.amount) / 1e9;
-    else if (preferredQuote === SOL && opposite(rawSol)) amount = Math.abs(Number(rawSol)) / 1e9;
+    if (preferredQuote === SOL && opposite(rawSol)) amount = Math.abs(Number(rawSol)) / 1e9;
+    else if (preferredQuote === SOL && event?.amount != null) amount = Number(event.amount) / 1e9;
     else if (stableChange && opposite(stableChange.raw)) amount = Math.abs(Number(stableChange.raw)) / 10 ** stableChange.decimals;
   }
   if (amount == null && !market && stable.length === 0 && !rawSol) return { ...base, kind: 'unknown', movements };

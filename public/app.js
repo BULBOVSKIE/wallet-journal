@@ -104,7 +104,8 @@ function updateBossTotal(run) {
   value.className = priced ? total > 0 ? 'gain' : total < 0 ? 'loss' : '' : '';
   const missing = all.filter(item => item.kind === 'missing' || item.kind === 'unknown').length;
   const otherTrades = all.filter(item => item.kind === 'trade' && !pairs.get(item.signature)?.closed).length;
-  const scope = run.complete ? 'Вся история по адресу' : run.error ? 'Частичная история' : 'Проверяем историю…';
+  const scope = run.complete ? (priced === closed && !missing && !otherTrades ? 'Вся история по адресу' : 'PnL по подтверждённым позициям')
+    : run.error ? 'Частичная история' : 'Проверяем историю…';
   $('#boss-coverage').textContent = `${scope} · ${priced} из ${closed} закрытых позиций в расчёте${otherTrades ? ` · Обменов без пары: ${otherTrades}` : ''}${missing ? ` · Операций не разобрано: ${missing}` : ''}`;
   $('#boss-retry').hidden = !run.error;
 }
