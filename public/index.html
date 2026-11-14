@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru" data-edition="original">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Журнал сделок и анализ поведения кошельков Solana.">
+  <title>Wallet Journal · Solana</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="top"><div class="shell masthead">
+    <a href="#" class="brand" aria-label="Wallet Journal, главная"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>Wallet Journal</a>
+    <span class="network"><i aria-hidden="true"></i> Solana Mainnet</span>
+  </div></header>
+  <main class="shell">
+    <section id="landing" class="landing" aria-labelledby="landing-title">
+      <div class="landing-copy">
+        <h1 id="landing-title" tabindex="-1">Wallet<br>Journal<span>.</span></h1>
+        <p>Сделки, входы и тактика кошельков Solana.</p>
+        <nav aria-label="Разделы журнала" class="landing-actions">
+          <a id="boss-entry" class="primary" href="#legend">Карман к Boss <span aria-hidden="true">↗</span></a>
+          <a class="quiet" href="#lookup">Проверить другие кошельки <span aria-hidden="true">→</span></a>
+        </nav>
+      </div>
+      <div class="landing-market">
+        <div class="landing-art" aria-hidden="true"><b></b><b></b><b></b></div>
+        <section class="sol-quote" aria-labelledby="sol-quote-label">
+          <div class="sol-quote-main"><h2 id="sol-quote-label">SOL / USD</h2><strong id="sol-quote-price">—</strong></div>
+          <p id="sol-quote-status">Загружаем цену…</p>
+        </section>
+      </div>
+    </section>
+    <div id="workspace" tabindex="-1" hidden>
+    <a class="back-link" href="#">← На главную</a>
+    <section class="intro" aria-labelledby="title">
+      <div class="intro-copy">
+        <p class="eyebrow" id="view-label">Личный журнал</p>
+        <h1 id="title" tabindex="-1">Карман босса</h1>
+        <a class="address" id="wallet-link" target="_blank" rel="noopener noreferrer" hidden></a>
+      </div>
+      <section id="boss-pnl" class="boss-pnl" aria-labelledby="boss-pnl-label" hidden>
+        <h2 id="boss-pnl-label">Реализованный PnL · USD</h2>
+        <div role="status"><strong id="boss-total">—</strong><p id="boss-coverage"></p></div>
+        <button id="boss-retry" class="quiet" type="button" hidden>Продолжить расчёт</button>
+      </section>
+      <form id="lookup" novalidate>
+        <label for="wallet-input">Public address Solana</label>
+        <div class="search"><input id="wallet-input" name="wallet" placeholder="8PhVUPW…cDF" autocomplete="off" spellcheck="false" maxlength="54" aria-describedby="input-error"><button class="primary" type="submit">Разобрать <span aria-hidden="true">↗</span></button></div>
+        <p id="input-error" class="error" role="alert"></p>
+      </form>
+    </section>
+    <div id="results" hidden>
+    <div class="toolbar">
+      <p id="coverage" role="status" aria-live="polite">Загружаем историю кошелька…</p>
+      <div class="tools"><button id="refresh" class="quiet" disabled>Обновить <span aria-hidden="true">↻</span></button></div>
+    </div>
+    <div class="layout">
+      <section aria-labelledby="history-title" class="history">
+        <div class="section-head"><h2 id="history-title">Позиции</h2><span id="trade-count" class="small"></span></div>
+        <div id="history-list" class="trades"></div>
+        <button id="more" class="quiet more" hidden>Загрузить более ранние операции</button>
+      </section>
+      <aside aria-labelledby="patterns-title" class="analysis">
+        <div class="section-head"><h2 id="patterns-title">Тактика</h2></div>
+        <div id="patterns" class="patterns" aria-live="polite"></div>
+      </aside>
+    </div>
+    </div>
+    </div>
+  </main>
+  <footer class="shell footer"><span>Wallet Journal</span><span>Solana · GeckoTerminal · Coinbase</span></footer>
+  <template id="trade-template">
+    <details class="trade"><summary>
+      <span class="direction"></span>
+      <span class="token"><strong></strong><small></small></span>
+      <time></time><span class="amount"></span><span class="expand" aria-hidden="true"></span>
+    </summary><div class="trade-body"></div></details>
+  </template>
+</body>
+</html>
